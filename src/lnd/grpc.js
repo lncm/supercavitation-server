@@ -52,5 +52,19 @@ export const invoiceGet = amount => new Promise((resolve) => {
   });
 });
 
+export const invoicePoll = hash => new Promise((resolve) => {
+  lightning.LookupInvoice({ r_hash_str: hash }, (err, res) => {
+    if (err) {
+      throw err;
+    }
+
+    // TODO: check if paid
+
+    console.log(res);
+
+    resolve(res);
+  });
+});
+
 
 export default lightning;
