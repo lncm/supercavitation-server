@@ -47,15 +47,11 @@ export default () => {
         fullHash: undefined,
       });
 
-      // TODO: create and return signature as well
       const signature = await signMessage(smallInvoice);
-
-      smallInvoice.signature = signature;
-      res.json(
-        // verify amount is valid amount and exists
-        // keep RSK address (req.query.address) for validation
-        smallInvoice,
-      );
+      res.json({
+        data: smallInvoice,
+        signature,
+      });
 
       return;
     }
