@@ -33,7 +33,7 @@ const lightning = new lnrpc.Lightning(uri, creds);
 
 lightning.getInfo({}, (err, response) => {
   if (err) { throw err; }
-  console.log('connected to LND', uri, response);
+  // console.log('connected to LND', uri, response);
 });
 
 export default lightning;
