@@ -47,6 +47,10 @@ call.on('data', (invoice) => {
   }
 });
 
+call.on('status', (status) => {
+  console.log('status:', status);
+});
+
 call.on('end', () => {
   console.log('connection ended');
 });
