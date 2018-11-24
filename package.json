@@ -22,7 +22,6 @@
   "homepage": "https://github.com/lncm/supercavitation-server#readme",
   "dependencies": {
     "@grpc/proto-loader": "^0.3.0",
-    "bignumber": "^1.1.0",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cors": "2.7.1",
@@ -31,7 +30,8 @@
     "kexec": "^3.0.0",
     "morgan": "^1.9.1",
     "truffle-hdwallet-provider": "git://github.com/trufflesuite/truffle-hdwallet-provider.git#a6f5524fbc8c973df7828bda59c61c47e51a3bec",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^1.0.0-beta.36",
+    "bignumber.js": "latest"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

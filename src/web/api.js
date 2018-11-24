@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import Web3 from 'web3';
-import BigNumber from 'bignumber';
+// import Web3 from 'web3';
+import { BigNumber } from 'bignumber.js';
 
 import { version } from '../../package.json';
 
@@ -11,12 +11,12 @@ function validAmount(amount) {
   // Amount must be greater than 0
   // Amount must be valid integer
   // Amount must not be more than 2.1^14
-  const { BN } = BigNumber;
+  // const { BN } = BigNumber;
 
-  const bNum = new BN(amount);
+  const bNum = new BigNumber(amount);
 
   // const amountBN = Web3.utils.toBN(amount);
-  return !!(BN.prototype.isInteger(bNum) && bNum >= 0 && 2.1 * 1e14);
+  return !!(bNum.isInteger() && bNum >= 0 && 2.1 * 1e14);
 }
 
 export default () => {
@@ -47,7 +47,7 @@ export default () => {
 
   api.get('/info', (req, res) => {
     res.json({
-      text: "Hello, I'm Bob. I would never scam you. Trust me ;).",
+      text: 'Hello, I\'m Bob. I would never scam you. Trust me ;).',
       minAmount: 1000,
       timeLockNumber: 30,
       exchangeRate: 0.98,
