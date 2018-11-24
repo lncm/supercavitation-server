@@ -4,9 +4,7 @@ export async function getInfo() {
   await infoGet();
 }
 
-export async function getInvoice(amount) {
-  // TODO: if amount ==null create invoice for small amount
-
+export async function getInvoice(amount = 100) {
   const invoice = await invoiceGet(amount);
 
   return {

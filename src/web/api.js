@@ -35,7 +35,7 @@ export default () => {
     if (validAmount(req.query.amount)) {
       // TODO: validate address
 
-      const smallInvoice = await getInvoice(null);
+      const smallInvoice = await getInvoice();
 
       store({
         rskAddress: req.query.address,
@@ -62,6 +62,8 @@ export default () => {
 
   api.get('/fullInvoice', async (req, res) => {
     const paid = invoiceStatus(req.query.smallHash);
+
+    // TODO: validate that smallHash is 32 bytes
 
     if (!paid) {
       // TODO: spawn a SubscribeInvoices
