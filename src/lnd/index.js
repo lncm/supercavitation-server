@@ -1,14 +1,17 @@
-import util from 'util';
-
 import lightning from './grpc';
 
 const infoGet = () => new Promise((resolve) => {
-    lightning.getInfo({}, (err, res) => resolve(res));
+  lightning.getInfo({}, (err, res) => resolve(res));
 });
 
-export async function info() {
-    const info = await getInfo();
-    console.log(info);
-    return info;
+export async function methodOne() {
+  const info = await infoGet();
+  console.log(info);
+  return info;
 }
 
+export async function methodTwo() {
+  const info = await infoGet();
+  console.log(info);
+  return info;
+}

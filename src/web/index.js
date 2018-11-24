@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import api from './api';
 import config from '../../config.json';
 
-let app = express();
+const app = express();
 app.server = http.createServer(app);
 
 // logger
@@ -14,11 +14,11 @@ app.use(morgan('dev'));
 
 // 3rd party middleware
 app.use(cors({
-	exposedHeaders: config.corsHeaders
+  exposedHeaders: config.corsHeaders,
 }));
 
 app.use(bodyParser.json({
-	limit : config.bodyLimit
+  limit: config.bodyLimit,
 }));
 
 // api router

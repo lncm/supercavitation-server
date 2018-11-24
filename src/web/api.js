@@ -1,18 +1,18 @@
-import { version } from '../../package.json';
 import { Router } from 'express';
+import { version } from '../../package.json';
 
-export default ({ config, db }) => {
-	let api = Router();
+export default () => {
+  const api = Router();
 
-	api.get('/', (req, res) => {
-		res.json({ version });
-	});
+  api.get('/', (req, res) => {
+    res.json({ version });
+  });
 
-	api.get('/hello', (req, res) => {
-		res.json({ text: 'Hello World' });
-	});
+  api.get('/hello', (req, res) => {
+    res.json({ text: 'Hello World' });
+  });
 
-	// fill me out
+  // fill me out
 
-	return api;
-}
+  return api;
+};

@@ -1,4 +1,4 @@
-import web from './web';
-import lnd from './lnd';
+import './web';
+import './lnd';
 
 console.log('started');
