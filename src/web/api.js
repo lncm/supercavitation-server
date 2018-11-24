@@ -67,7 +67,7 @@ export default () => {
   api.get('/fullInvoice', async (req, res) => {
     req.setTimeout(0);
 
-    if (req.query.smallHash.length !== 32) {
+    if (Buffer.from(req.query.smallHash, 'base64').length !== 32) {
       res.json({ error: 'Invalid payment hash' });
       return;
     }
