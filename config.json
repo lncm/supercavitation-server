@@ -1,0 +1,7 @@
+{
+	"port": 8080,
+	"bodyLimit": "100kb",
+	"corsHeaders": ["Link"],
+	"lndUri": "lndtest.lncm.io:443",
+	"evmUri": "https://rsktest.lnvm.io"
+}

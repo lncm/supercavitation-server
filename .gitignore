@@ -1,0 +1,4 @@
+node_modules
+creds/admin.macaroon
+creds/tls.cert
+dist
