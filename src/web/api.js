@@ -1,7 +1,23 @@
 import { Router } from 'express';
+import Web3 from 'web3';
+import BigNumber from 'bignumber';
+
 import { version } from '../../package.json';
 
 import { getInvoice } from '../lnd/index';
+
+function validAmount(amount) {
+  // Validate amount of Satoshis
+  // Amount must be greater than 0
+  // Amount must be valid integer
+  // Amount must not be more than 2.1^14
+  const { BN } = BigNumber;
+
+  const bNum = new BN(amount);
+
+  // const amountBN = Web3.utils.toBN(amount);
+  return !!(BN.prototype.isInteger(bNum) && bNum >= 0 && 2.1 * 1e14);
+}
 
 export default () => {
   const api = Router();
@@ -10,22 +26,23 @@ export default () => {
     res.json({ version });
   });
 
-  api.get('/hello', (req, res) => {
-    res.json({ text: 'Hello World' });
-  });
-
   api.get('/invoice', async (req, res) => {
-    // REST endpoint accepts full amount and RSK address
+    // REST endpoint accepts full amount in satoshis and RSK address
     // Respond with LN invoice for small gas amount and
     // respond with RSK signature
     // e.g.:
     // localhost:8080/api/invoice?amount=1234&address=1234
-
-    res.json(
-      // verify amount is valid amount and exists
-      // keep RSK address (req.query.address) for validation
-      await getInvoice(req.query.amount),
-    );
+    if (validAmount(req.query.amount)) {
+      res.json(
+        // verify amount is valid amount and exists
+        // keep RSK address (req.query.address) for validation
+        await getInvoice(req.query.amount),
+      );
+    } else {
+      res.json({
+        error: 'Not a valid amount of Satoshis',
+      });
+    }
   });
 
   api.get('/info', (req, res) => {
