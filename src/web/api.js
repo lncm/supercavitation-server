@@ -1,9 +1,8 @@
 import { Router } from 'express';
 // import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
-
 import { version } from '../../package.json';
-
+import { store, getBySmallHash } from '../store/main';
 import { getInvoice } from '../lnd/index';
 
 function validAmount(amount) {
@@ -26,23 +25,48 @@ export default () => {
     res.json({ version });
   });
 
-  api.get('/invoice', async (req, res) => {
+  api.get('/smallInvoice', async (req, res) => {
     // REST endpoint accepts full amount in satoshis and RSK address
     // Respond with LN invoice for small gas amount and
     // respond with RSK signature
     // e.g.:
     // localhost:8080/api/invoice?amount=1234&address=1234
     if (validAmount(req.query.amount)) {
+      // TODO: validate address
+
+      const smallInvoice = await getInvoice(null);
+
+      store({
+        rskAddress: req.query.address,
+        amount: req.query.amount,
+        smallHash: smallInvoice.hash,
+        fullHash: '',
+      });
+
+      // TODO: create and return signature as well
+
       res.json(
         // verify amount is valid amount and exists
         // keep RSK address (req.query.address) for validation
-        await getInvoice(req.query.amount),
+        smallInvoice,
       );
-    } else {
-      res.json({
-        error: 'Not a valid amount of Satoshis',
-      });
+
+      return;
     }
+
+    res.json({
+      error: 'Not a valid amount of Satoshis',
+    });
+  });
+
+  api.get('/fullInvoice', async (req, res) => {
+    const order = getBySmallHash(req.query.smallHash);
+
+    const fullInvoice = await getInvoice(order.amount);
+
+    // TODO: get txid
+
+    res.json(fullInvoice);
   });
 
   api.get('/info', (req, res) => {
