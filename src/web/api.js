@@ -45,6 +45,8 @@ export default () => {
 
       // TODO: create and return signature as well
 
+      // TODO: spawn a SubscribeInvoices
+
       res.json(
         // verify amount is valid amount and exists
         // keep RSK address (req.query.address) for validation
@@ -62,9 +64,10 @@ export default () => {
   api.get('/fullInvoice', async (req, res) => {
     const order = getBySmallHash(req.query.smallHash);
 
-    const fullInvoice = await getInvoice(order.amount);
+    // TODO: verify that the small invoice was paid
+    // TODO: pay Alice, get txid and send it to her
 
-    // TODO: get txid
+    const fullInvoice = await getInvoice(order.amount);
 
     res.json(fullInvoice);
   });
