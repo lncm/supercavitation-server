@@ -26,63 +26,73 @@ export default () => {
     res.json({ version });
   });
 
+
   api.get('/smallInvoice', async (req, res) => {
-    // REST endpoint accepts full amount in satoshis and RSK address
-    // Respond with LN invoice for small gas amount and
-    // respond with RSK signature
-    // e.g.:
-    // localhost:8080/api/invoice?amount=1234&address=1234
-    if (validAmount(req.query.amount)) {
-      // TODO: validate address
+    try {
+      // REST endpoint accepts full amount in satoshis and RSK address
+      // Respond with LN invoice for small gas amount and
+      // respond with RSK signature
+      // e.g.:
+      // localhost:8080/api/invoice?amount=1234&address=1234
+      if (validAmount(req.query.amount)) {
+        // TODO: validate address
 
-      const smallInvoice = await getInvoice();
+        const smallInvoice = await getInvoice();
 
-      store({
-        rskAddress: req.query.address,
-        amount: req.query.amount,
-        smallHash: smallInvoice.hash,
-        fullHash: undefined,
+        store({
+          rskAddress: req.query.address,
+          amount: req.query.amount,
+          smallHash: smallInvoice.hash,
+          fullHash: undefined,
+        });
+
+        // TODO: create and return signature as well
+
+        res.json(
+          // verify amount is valid amount and exists
+          // keep RSK address (req.query.address) for validation
+          smallInvoice,
+        );
+
+        return;
+      }
+
+      res.json({
+        error: 'Not a valid amount of Satoshis',
       });
-
-      // TODO: create and return signature as well
-
-      res.json(
-        // verify amount is valid amount and exists
-        // keep RSK address (req.query.address) for validation
-        smallInvoice,
-      );
-
-      return;
+    } catch (e) {
+      process.stderr.write(e);
     }
-
-    res.json({
-      error: 'Not a valid amount of Satoshis',
-    });
   });
 
   api.get('/fullInvoice', async (req, res) => {
-    const paid = invoiceStatus(req.query.smallHash);
+    req.setTimeout(0);
+    try {
+      const paid = invoiceStatus(req.query.smallHash);
 
-    // TODO: validate that smallHash is 32 bytes
+      // TODO: validate that smallHash is 32 bytes
 
-    if (!paid) {
-      // TODO: spawn a SubscribeInvoices
-      // TODO: listen for small invoice payment
-      await new Promise((resolve) => {
-        listenInvoices(req.query.smallHash, () => {
-          resolve();
+      if (!paid) {
+        // TODO: spawn a SubscribeInvoices
+        // TODO: listen for small invoice payment
+        await new Promise((resolve) => {
+          listenInvoices(req.query.smallHash, () => {
+            resolve();
+          });
         });
-      });
+
+        const order = getBySmallHash(req.query.smallHash);
+
+        // TODO: verify that the small invoice was paid
+        // TODO: pay Alice, get txid and send it to her
+
+        order.fullInvoice = await getInvoice(order.amount);
+
+        res.json(order.fullInvoice);
+      }
+    } catch (e) {
+      process.stderr.write(e);
     }
-
-    const order = getBySmallHash(req.query.smallHash);
-
-    // TODO: verify that the small invoice was paid
-    // TODO: pay Alice, get txid and send it to her
-
-    order.fullInvoice = await getInvoice(order.amount);
-
-    res.json(order.fullInvoice);
   });
 
   api.get('/info', (req, res) => {
