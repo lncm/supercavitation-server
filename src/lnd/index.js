@@ -11,6 +11,6 @@ export async function getInvoice(amount) {
 
   return {
     invoice: invoice.payment_request,
-    hash: invoice.r_hash,
+    hash: invoice.r_hash.toString('base64'),
   };
 }
