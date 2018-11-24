@@ -3,6 +3,6 @@
 	"bodyLimit": "100kb",
 	"corsHeaders": ["Link"],
 	"lndUri": "lndtest.lncm.io:443",
-	"evmUri": "https://rsktest.lncm.io",
+	"evmUri": "https://public-node.testnet.rsk.co",
 	"derevationPath": "m/44'/37310'/0'/0/"
 }
