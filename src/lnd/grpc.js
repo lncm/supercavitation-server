@@ -35,6 +35,7 @@ const hashes = {};
 const call = lightning.subscribeInvoices();
 
 call.on('data', (invoice) => {
+  console.log('data:', invoice);
   const [match] = Object.keys(hashes)
     .filter(hash => hash === invoice.r_hash.toString('base64'));
 
@@ -53,6 +54,10 @@ call.on('status', (status) => {
 
 call.on('end', () => {
   console.log('connection ended');
+});
+
+call.on('error', (error) => {
+  console.log('error:', error);
 });
 
 
