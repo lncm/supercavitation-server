@@ -3,9 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import config from '../../config.json';
 
-
 const uri = config.lndUri;
-
 
 // Due to updated ECDSA generated tls.cert we need to let grpc know that
 // we need to use that cipher suite otherwise there will be a handshake
@@ -37,15 +35,12 @@ const hashes = {};
 const call = lightning.subscribeInvoices();
 
 call.on('data', (invoice) => {
-  console.log(invoice, invoice.r_hash.toString('base64'), Object.keys(hashes));
   const [match] = Object.keys(hashes)
     .filter(hash => hash === invoice.r_hash.toString('base64'));
 
   if (!match) {
     return;
   }
-
-  console.log(match);
 
   if (invoice.settled) {
     hashes[match]();
@@ -60,7 +55,8 @@ call.on('end', () => {
 export const infoGet = () => new Promise((resolve) => {
   lightning.GetInfo({}, (err, res) => {
     if (err) {
-      throw err;
+      console.log(err);
+      return;
     }
 
     resolve(res);
@@ -70,7 +66,8 @@ export const infoGet = () => new Promise((resolve) => {
 export const invoiceGet = amount => new Promise((resolve) => {
   lightning.AddInvoice({ value: amount }, (err, res) => {
     if (err) {
-      throw err;
+      console.log(err);
+      return;
     }
 
     resolve(res);
@@ -78,14 +75,14 @@ export const invoiceGet = amount => new Promise((resolve) => {
 });
 
 export function listenInvoices(hash, fn) {
-  console.log('listen');
   hashes[hash] = fn;
 }
 
 export const invoiceStatus2 = hash => new Promise((resolve) => {
   lightning.LookupInvoice({ r_hash: hash }, (err, invoice) => {
     if (err) {
-      throw err;
+      console.log(err);
+      return;
     }
 
     resolve(invoice.settled);
