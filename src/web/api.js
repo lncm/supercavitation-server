@@ -6,6 +6,8 @@ import { store, getBySmallHash } from '../store/main';
 import { getInvoice, invoiceStatus } from '../lnd/index';
 import { listenInvoices } from '../lnd/grpc';
 
+import { getAccounts, signMessage } from '../evm';
+
 function validAmount(amount) {
   // Validate amount of Satoshis
   // Amount must be greater than 0
@@ -46,10 +48,12 @@ export default () => {
       });
 
       // TODO: create and return signature as well
+      const signature = await signMessage(smallInvoice);
 
       res.json(
         // verify amount is valid amount and exists
         // keep RSK address (req.query.address) for validation
+        signature,
         smallInvoice,
       );
 
