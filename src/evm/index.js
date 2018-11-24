@@ -1,11 +1,4 @@
-import Web3 from 'web3';
-import HDWalletProvider from 'truffle-hdwallet-provider';
-
-import { evmUri, derevationPath } from '../../config.json';
-
-const mnemonic = process.env.MNEMONIC.trim();
-const provider = new HDWalletProvider(mnemonic, evmUri, 0, 1, false, derevationPath);
-const web3 = new Web3(provider);
+import web3 from './web3';
 
 export async function getAccounts() {
   const accounts = await web3.eth.getAccounts();
@@ -18,3 +11,13 @@ export async function getBlockNumber() {
   console.log('got block', block);
   return block;
 }
+
+export async function signMessage(message) {
+  const address = (await web3.eth.getAccounts())[0];
+  return web3.eth.sign(message, address);
+}
+
+export function messageIsValid(address, data, signature) {
+  const signer = web3.eth.personal.ecRecover(data, signature);
+  return signer === address;
+} 
