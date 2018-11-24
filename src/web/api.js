@@ -101,6 +101,7 @@ export default () => {
       timeLockNumber: 30,
       exchangeRate: 0.98,
       reward: 10000,
+      depositFee: 50,
     });
   });
 
