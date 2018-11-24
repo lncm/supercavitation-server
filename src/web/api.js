@@ -101,9 +101,9 @@ export default () => {
       text: 'Hello, I\'m Bob. I would never scam you. Trust me ;).',
       minAmount: 1000,
       timeLockNumber: 30,
-      exchangeRate: 0.98,
-      reward: 10000,
       depositFee: 50,
+      exchangeRate: 0.98,
+      reward: 200,
     });
   });
 
