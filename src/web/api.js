@@ -3,7 +3,8 @@ import { Router } from 'express';
 import { BigNumber } from 'bignumber.js';
 import { version } from '../../package.json';
 import { store, getBySmallHash } from '../store/main';
-import { getInvoice } from '../lnd/index';
+import { getInvoice, invoiceStatus } from '../lnd/index';
+import { listenInvoices } from '../lnd/grpc';
 
 function validAmount(amount) {
   // Validate amount of Satoshis
@@ -40,12 +41,10 @@ export default () => {
         rskAddress: req.query.address,
         amount: req.query.amount,
         smallHash: smallInvoice.hash,
-        fullHash: '',
+        fullHash: undefined,
       });
 
       // TODO: create and return signature as well
-
-      // TODO: spawn a SubscribeInvoices
 
       res.json(
         // verify amount is valid amount and exists
@@ -62,14 +61,26 @@ export default () => {
   });
 
   api.get('/fullInvoice', async (req, res) => {
+    const paid = invoiceStatus(req.query.smallHash);
+
+    if (!paid) {
+      // TODO: spawn a SubscribeInvoices
+      // TODO: listen for small invoice payment
+      await new Promise((resolve) => {
+        listenInvoices(req.query.smallHash, () => {
+          resolve();
+        });
+      });
+    }
+
     const order = getBySmallHash(req.query.smallHash);
 
     // TODO: verify that the small invoice was paid
     // TODO: pay Alice, get txid and send it to her
 
-    const fullInvoice = await getInvoice(order.amount);
+    order.fullInvoice = await getInvoice(order.amount);
 
-    res.json(fullInvoice);
+    res.json(order.fullInvoice);
   });
 
   api.get('/info', (req, res) => {
