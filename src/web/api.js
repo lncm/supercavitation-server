@@ -18,9 +18,13 @@ export default () => {
     // REST endpoint accepts full amount and RSK address
     // Respond with LN invoice for small gas amount and
     // respond with RSK signature
+    // e.g.:
+    // localhost:8080/api/invoice?amount=1234&address=1234
 
     res.json(
-      await getInvoice(req.query.amount, req.query.address),
+      // verify amount is valid amount and exists
+      // keep RSK address (req.query.address) for validation
+      await getInvoice(req.query.amount),
     );
   });
 
