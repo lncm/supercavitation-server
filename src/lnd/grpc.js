@@ -78,7 +78,7 @@ export function listenInvoices(hash, fn) {
 }
 
 export const invoiceStatus2 = hash => new Promise((resolve) => {
-  lightning.LookupInvoice({ r_hash_str: hash }, (err, invoice) => {
+  lightning.LookupInvoice({ r_hash: hash }, (err, invoice) => {
     if (err) {
       throw err;
     }
