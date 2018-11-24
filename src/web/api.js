@@ -50,10 +50,10 @@ export default () => {
       // TODO: create and return signature as well
       const signature = await signMessage(smallInvoice);
 
+      smallInvoice.signature = signature;
       res.json(
         // verify amount is valid amount and exists
         // keep RSK address (req.query.address) for validation
-        signature,
         smallInvoice,
       );
 
