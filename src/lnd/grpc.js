@@ -32,6 +32,27 @@ const { lnrpc } = lnrpcDescriptor;
 const lightning = new lnrpc.Lightning(uri, creds);
 
 
+const hashes = {};
+
+const call = lightning.subscribeInvoices();
+
+call.on('data', (invoice) => {
+  const match = Object.keys(hashes).filter(hash => hash === invoice.r_hash);
+
+  if (!match) {
+    return;
+  }
+
+  if (invoice.settled) {
+    hashes[match]();
+  }
+});
+
+call.on('end', () => {
+  // TODO: restart
+});
+
+
 export const infoGet = () => new Promise((resolve) => {
   lightning.GetInfo({}, (err, res) => {
     if (err) {
@@ -49,6 +70,20 @@ export const invoiceGet = amount => new Promise((resolve) => {
     }
 
     resolve(res);
+  });
+});
+
+export function listenInvoices(hash, fn) {
+  hashes[hash] = fn;
+}
+
+export const invoiceStatus2 = hash => new Promise((resolve) => {
+  lightning.LookupInvoice({ r_hash_str: hash }, (err, invoice) => {
+    if (err) {
+      throw err;
+    }
+
+    resolve(invoice.settled);
   });
 });
 
