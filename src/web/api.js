@@ -67,7 +67,8 @@ export default () => {
   api.get('/fullInvoice', async (req, res) => {
     req.setTimeout(0);
 
-    if (Buffer.from(req.query.smallHash, 'base64').length !== 32) {
+    const hashBytes = Buffer.from(req.query.smallHash, 'base64');
+    if (hashBytes.length !== 32) {
       res.json({ error: 'Invalid payment hash' });
       return;
     }
@@ -76,19 +77,16 @@ export default () => {
 
     if (!paid) {
       await new Promise((resolve) => {
-        console.log('bbbb');
         listenInvoices(req.query.smallHash, () => {
           resolve();
         });
       });
 
-      console.log('aaa');
-
       const order = getBySmallHash(req.query.smallHash);
 
       order.fullInvoice = await getInvoice(order.amount);
 
-      const txid = await createSwap(order.rskAddress, order.amount, order.fullInvoice.hash);
+      const txid = await createSwap(order.rskAddress, order.amount, `0x${hashBytes.toString('hex')}`);
 
       res.json({
         msg: order.fullInvoice,

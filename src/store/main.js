@@ -12,7 +12,7 @@ export function store(order) {
 }
 
 export function getBySmallHash(smallHash) {
-  const order = orders.filter(o => o.smallHash === smallHash);
+  const [order] = orders.filter(o => o.smallHash === smallHash);
   if (order !== undefined) {
     return order;
   }
