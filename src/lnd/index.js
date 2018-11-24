@@ -12,7 +12,3 @@ export async function getInvoice() {
   return invoice;
 }
 
-export default {
-  getInfo,
-  getInvoice,
-};
