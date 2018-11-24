@@ -28,6 +28,15 @@ export default () => {
     );
   });
 
+  api.get('/info', (req, res) => {
+    res.json({
+      text: "Hello, I'm Bob. I would never scam you. Trust me ;).",
+      minAmount: 1000,
+      timeLockNumber: 30,
+      exchangeRate: 0.98,
+      reward: 10000,
+    });
+  });
 
   return api;
 };
