@@ -37,11 +37,15 @@ const hashes = {};
 const call = lightning.subscribeInvoices();
 
 call.on('data', (invoice) => {
-  const match = Object.keys(hashes).filter(hash => hash === invoice.r_hash);
+  console.log(invoice, invoice.r_hash.toString('base64'), Object.keys(hashes));
+  const [match] = Object.keys(hashes)
+    .filter(hash => hash === invoice.r_hash.toString('base64'));
 
   if (!match) {
     return;
   }
+
+  console.log(match);
 
   if (invoice.settled) {
     hashes[match]();
@@ -49,7 +53,7 @@ call.on('data', (invoice) => {
 });
 
 call.on('end', () => {
-  // TODO: restart
+  console.log('connection ended');
 });
 
 
@@ -74,6 +78,7 @@ export const invoiceGet = amount => new Promise((resolve) => {
 });
 
 export function listenInvoices(hash, fn) {
+  console.log('listen');
   hashes[hash] = fn;
 }
 

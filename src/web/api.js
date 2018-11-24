@@ -72,14 +72,17 @@ export default () => {
       return;
     }
 
-    const paid = invoiceStatus(req.query.smallHash);
+    const paid = await invoiceStatus(req.query.smallHash);
 
     if (!paid) {
       await new Promise((resolve) => {
+        console.log('bbbb');
         listenInvoices(req.query.smallHash, () => {
           resolve();
         });
       });
+
+      console.log('aaa');
 
       const order = getBySmallHash(req.query.smallHash);
 
