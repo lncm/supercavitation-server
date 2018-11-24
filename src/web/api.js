@@ -36,10 +36,10 @@ export default () => {
     // e.g.:
     // localhost:8080/api/invoice?amount=1234&address=1234
     if (validAmount(req.query.amount)) {
-        if (!Web3.utils.isAddress(req.query.address)) {
-          res.json({ error: 'Invalid RSK address' });
-        }
+      if (!Web3.utils.isAddress(req.query.address)) {
+        res.json({ error: 'Invalid RSK address' });
       }
+
       const smallInvoice = await getInvoice();
 
       store({
