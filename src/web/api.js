@@ -16,7 +16,7 @@ function validAmount(amount) {
   const bNum = new BigNumber(amount);
 
   // const amountBN = Web3.utils.toBN(amount);
-  return !!(bNum.isInteger() && bNum >= 0 && 2.1 * 1e14);
+  return !!(bNum.isInteger() && bNum >= 0 && bNum < 2.1 * 1e14);
 }
 
 export default () => {
