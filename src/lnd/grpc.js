@@ -98,5 +98,17 @@ export const invoiceStatus2 = hash => new Promise((resolve) => {
   });
 });
 
+export const invoicePreImage = hash => new Promise((resolve) => {
+  lightning.LookupInvoice({ r_hash: hash }, (err, invoice) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    resolve(invoice.r_preimage);
+  });
+});
+
+
 
 export default lightning;

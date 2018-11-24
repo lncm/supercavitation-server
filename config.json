@@ -4,5 +4,9 @@
 	"corsHeaders": ["Link"],
 	"lndUri": "lndtest.lncm.io:443",
 	"evmUri": "https://public-node.testnet.rsk.co",
-	"derevationPath": "m/44'/37310'/0'/0/"
+	"derevationPath": "m/44'/37310'/0'/0/",
+	"blocksBeforeCancelEnabled": 100,
+	"reward": 500,
+	"minimumAmount": 1000,
+	"text": "Hello, I am BOB"
 }

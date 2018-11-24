@@ -4,8 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { version } from '../../package.json';
 import { store, getBySmallHash } from '../store/main';
 import { getInvoice, invoiceStatus } from '../lnd/index';
-import { listenInvoices } from '../lnd/grpc';
-import { signMessage, createSwap } from '../evm';
+import { listenInvoices, invoicePreImage } from '../lnd/grpc';
+import { signMessage, createSwap, claimReward } from '../evm';
+
+import { text, minAmount, timeLockNumber, depositFee, exchangeRate, reward } from '../../config.json';
 
 function validAmount(amount) {
   // Validate amount of Satoshis
@@ -27,7 +29,12 @@ export default () => {
     res.json({ version });
   });
 
+  api.get('/info', (req, res) => {
+    res.json({ text, minAmount, timeLockNumber, depositFee, exchangeRate, reward });
+  });
 
+  // TODO skip this step if user has already deposited...
+  
   api.get('/smallInvoice', async (req, res) => {
     // REST endpoint accepts full amount in satoshis and RSK address
     // Respond with LN invoice for small gas amount and
@@ -96,15 +103,32 @@ export default () => {
     });
   });
 
-  api.get('/info', (req, res) => {
-    res.json({
-      text: 'Hello, I\'m Bob. I would never scam you. Trust me ;).',
-      minAmount: 1000,
-      timeLockNumber: 30,
-      depositFee: 50,
-      exchangeRate: 0.98,
-      reward: 200,
-    });
+  api.post('/checkPayment', async (req, res) => {
+    req.setTimeout(0);
+
+    const { fullHash } = req.body;
+    const hashBytes = Buffer.from(fullHash, 'base64');
+
+    if (hashBytes.length !== 32) {
+      res.json({ error: 'Invalid payment hash' });
+      return;
+    }
+
+    const paid = await invoiceStatus(fullHash);
+
+    if (!paid) {
+      await new Promise((resolve) => {
+        listenInvoices(fullHash, () => {
+          resolve();
+        });
+      });
+    }
+    
+    // if it's paid, claim the reward!
+    
+    const preImage = `0x${(await invoicePreImage(fullHash))}`.toString('hex');
+    const response = await claimReward(`0x${hashBytes.toString('hex')}`, preImage);
+    res.json(response);
   });
 
   return api;
