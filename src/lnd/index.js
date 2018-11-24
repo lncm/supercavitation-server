@@ -6,9 +6,11 @@ export async function getInfo() {
   return info;
 }
 
-export async function getInvoice() {
-  const invoice = await invoiceGet();
-  console.log(invoice, invoice.payment_request);
-  return invoice;
-}
+export async function getInvoice(amount) {
+  const invoice = await invoiceGet(amount);
 
+  return {
+    invoice: invoice.payment_request,
+    hash: invoice.r_hash,
+  };
+}

@@ -42,8 +42,8 @@ export const infoGet = () => new Promise((resolve) => {
   });
 });
 
-export const invoiceGet = () => new Promise((resolve) => {
-  lightning.AddInvoice({}, (err, res) => {
+export const invoiceGet = amount => new Promise((resolve) => {
+  lightning.AddInvoice({ value: amount }, (err, res) => {
     if (err) {
       throw err;
     }
