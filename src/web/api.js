@@ -14,13 +14,16 @@ export default () => {
     res.json({ text: 'Hello World' });
   });
 
-  api.get('/invoice', (req, res) => {
-    console.log(getInvoice());
+  api.get('/invoice', async (req, res) => {
+    // REST endpoint accepts full amount and RSK address
+    // Respond with LN invoice for small gas amount and
+    // respond with RSK signature
 
-    res.json({ text: 'invoice' });
+    res.json(
+      await getInvoice(req.query.amount, req.query.address),
+    );
   });
 
-  // fill me out
 
   return api;
 };
