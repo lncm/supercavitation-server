@@ -6,7 +6,7 @@ import { store, getBySmallHash } from '../store/main';
 import { getInvoice, invoiceStatus } from '../lnd/index';
 import { listenInvoices } from '../lnd/grpc';
 
-import { getAccounts, signMessage } from '../evm';
+import { signMessage } from '../evm';
 
 function validAmount(amount) {
   // Validate amount of Satoshis
