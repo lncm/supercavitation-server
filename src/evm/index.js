@@ -30,6 +30,9 @@ export async function createSwap(customer, amount, preImageHash) {
   const reward = 1;
   const blocksBeforeCancelEnabled = 200;
   const [from] = await getAccounts();
-  const txId = await contract.methods.createSwap(customer, amount, reward, preImageHash, blocksBeforeCancelEnabled).send({ from, gasPrice });
+  const txId = await new Promise((resolve) => {
+    contract.methods.createSwap(customer, amount, reward, preImageHash, blocksBeforeCancelEnabled).send({ from, gasPrice })
+      .on('transactionHash', tx => resolve(tx));
+  });
   return txId;
 }
