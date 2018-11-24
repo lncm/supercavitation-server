@@ -5,7 +5,6 @@ import { version } from '../../package.json';
 import { store, getBySmallHash } from '../store/main';
 import { getInvoice, invoiceStatus } from '../lnd/index';
 import { listenInvoices } from '../lnd/grpc';
-
 import { signMessage, createSwap } from '../evm';
 
 function validAmount(amount) {
@@ -64,25 +63,27 @@ export default () => {
     });
   });
 
-  api.get('/fullInvoice', async (req, res) => {
+  api.post('/fullInvoice', async (req, res) => {
     req.setTimeout(0);
 
-    const hashBytes = Buffer.from(req.query.smallHash, 'base64');
+    const { smallHash } = req.body;
+    const hashBytes = Buffer.from(smallHash, 'base64');
+
     if (hashBytes.length !== 32) {
       res.json({ error: 'Invalid payment hash' });
       return;
     }
 
-    const paid = await invoiceStatus(req.query.smallHash);
+    const paid = await invoiceStatus(smallHash);
 
     if (!paid) {
       await new Promise((resolve) => {
-        listenInvoices(req.query.smallHash, () => {
+        listenInvoices(smallHash, () => {
           resolve();
         });
       });
 
-      const order = getBySmallHash(req.query.smallHash);
+      const order = getBySmallHash(smallHash);
 
       order.fullInvoice = await getInvoice(order.amount);
 
