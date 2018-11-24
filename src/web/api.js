@@ -6,7 +6,7 @@ import { store, getBySmallHash } from '../store/main';
 import { getInvoice, invoiceStatus } from '../lnd/index';
 import { listenInvoices } from '../lnd/grpc';
 
-import { signMessage } from '../evm';
+import { signMessage, createSwap } from '../evm';
 
 function validAmount(amount) {
   // Validate amount of Satoshis
@@ -38,6 +38,7 @@ export default () => {
     if (validAmount(req.query.amount)) {
       if (!Web3.utils.isAddress(req.query.address)) {
         res.json({ error: 'Invalid RSK address' });
+        return;
       }
 
       const smallInvoice = await getInvoice();
@@ -51,7 +52,7 @@ export default () => {
 
       const signature = await signMessage(smallInvoice);
       res.json({
-        data: smallInvoice,
+        msg: smallInvoice,
         signature,
       });
 
@@ -74,8 +75,6 @@ export default () => {
     const paid = invoiceStatus(req.query.smallHash);
 
     if (!paid) {
-      // TODO: spawn a SubscribeInvoices
-      // TODO: listen for small invoice payment
       await new Promise((resolve) => {
         listenInvoices(req.query.smallHash, () => {
           resolve();
@@ -84,12 +83,14 @@ export default () => {
 
       const order = getBySmallHash(req.query.smallHash);
 
-      // TODO: verify that the small invoice was paid
-      // TODO: pay Alice, get txid and send it to her
-
       order.fullInvoice = await getInvoice(order.amount);
 
-      res.json(order.fullInvoice);
+      const txid = await createSwap(order.rskAddress, order.amount, order.fullInvoice.hash);
+
+      res.json({
+        msg: order.fullInvoice,
+        txid,
+      });
     }
   });
 
