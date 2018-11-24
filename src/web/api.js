@@ -82,18 +82,18 @@ export default () => {
           resolve();
         });
       });
-
-      const order = getBySmallHash(smallHash);
-
-      order.fullInvoice = await getInvoice(order.amount);
-
-      const txid = await createSwap(order.rskAddress, order.amount, `0x${hashBytes.toString('hex')}`);
-
-      res.json({
-        msg: order.fullInvoice,
-        txid,
-      });
     }
+
+    const order = getBySmallHash(smallHash);
+
+    order.fullInvoice = await getInvoice(order.amount);
+
+    const txid = await createSwap(order.rskAddress, order.amount, `0x${hashBytes.toString('hex')}`);
+
+    res.json({
+      msg: order.fullInvoice,
+      txid,
+    });
   });
 
   api.get('/info', (req, res) => {
