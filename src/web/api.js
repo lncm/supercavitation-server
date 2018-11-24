@@ -1,5 +1,5 @@
 import { Router } from 'express';
-// import Web3 from 'web3';
+import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 import { version } from '../../package.json';
 import { store, getBySmallHash } from '../store/main';
@@ -36,8 +36,10 @@ export default () => {
     // e.g.:
     // localhost:8080/api/invoice?amount=1234&address=1234
     if (validAmount(req.query.amount)) {
-      // TODO: validate address
-
+        if (!Web3.utils.isAddress(req.query.address)) {
+          res.json({ error: 'Invalid RSK address' });
+        }
+      }
       const smallInvoice = await getInvoice();
 
       store({
