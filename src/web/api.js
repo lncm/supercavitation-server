@@ -34,7 +34,6 @@ export default () => {
   });
 
   // TODO skip this step if user has already deposited...
-  
   api.get('/smallInvoice', async (req, res) => {
     // REST endpoint accepts full amount in satoshis and RSK address
     // Respond with LN invoice for small gas amount and
@@ -123,9 +122,9 @@ export default () => {
         });
       });
     }
-    
+
     // if it's paid, claim the reward!
-    
+
     const preImage = `0x${(await invoicePreImage(fullHash))}`.toString('hex');
     const response = await claimReward(`0x${hashBytes.toString('hex')}`, preImage);
     res.json(response);
