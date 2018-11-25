@@ -1,8 +1,8 @@
 {
-	"port": 8080,
+	"port": 8081,
 	"bodyLimit": "100kb",
 	"corsHeaders": ["Link"],
-	"lndUri": "lndtest.lncm.io:443",
+	"lndUri": "localhost:10009",
 	"evmUri": "https://public-node.testnet.rsk.co",
 	"derevationPath": "m/44'/37310'/0'/0/",
 	"blocksBeforeCancelEnabled": 100,
