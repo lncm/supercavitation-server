@@ -30,8 +30,9 @@ export function messageIsValid(address, data, signature) {
 export async function createSwap(customer, amount, preImageHash) {
   const [from] = await getAccounts();
   const txId = await new Promise((resolve) => {
-    console.log({customer, amount, reward, preImageHash, timeLockNumber, from, gasPrice });
-    contract.methods.createSwap(customer, amount, reward, preImageHash, timeLockNumber).send({ from, gasPrice })
+    const intAmount = parseInt(amount);
+    console.log({ customer, intAmount, reward, preImageHash, timeLockNumber, from, gasPrice });
+    contract.methods.createSwap(customer, intAmount, reward, preImageHash, timeLockNumber).send({ from, gasPrice })
       .on('transactionHash', tx => resolve(tx));
   });
   return txId;
