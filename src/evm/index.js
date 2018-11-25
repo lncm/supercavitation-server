@@ -30,7 +30,7 @@ export function messageIsValid(address, data, signature) {
 export async function createSwap(customer, amount, preImageHash) {
   const [from] = await getAccounts();
   const txId = await new Promise((resolve) => {
-    contract.methods.createSwap(customer, amount, reward, preImageHash, blocksBeforeCancelEnabled).send({ from, gasPrice })
+    contract.methods.createSwap(customer, amount * 1e10, reward, preImageHash, blocksBeforeCancelEnabled).send({ from, gasPrice })
       .on('transactionHash', tx => resolve(tx));
   });
   return txId;
