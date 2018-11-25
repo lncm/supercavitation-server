@@ -149,8 +149,10 @@ export default () => {
 
     // if it's paid, claim the reward!
 
-    const preImage = `0x${(await invoicePreImage(fullHash))}`.toString('hex');
-    const response = await claimReward(`0x${hashBytes.toString('hex')}`, preImage);
+    const preImage = `0x${(await invoicePreImage(fullHash)).toString('hex')}`;
+    const preImageHash = `0x${hashBytes.toString('hex')}`;
+    console.log({ preImage, preImageHash });
+    const response = await claimReward(preImageHash, preImage);
     res.json(response);
   });
 
