@@ -4,8 +4,8 @@ export async function getInfo() {
   await infoGet();
 }
 
-export async function getInvoice(amount = 100) {
-  const invoice = await invoiceGet(amount);
+export async function getInvoice(memo, amount = 100) {
+  const invoice = await invoiceGet(memo, amount);
 
   return {
     invoice: invoice.payment_request,

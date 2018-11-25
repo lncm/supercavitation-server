@@ -7,7 +7,14 @@ import { getInvoice, invoiceStatus } from '../lnd/index';
 import { listenInvoices, invoicePreImage } from '../lnd/grpc';
 import { signMessage, createSwap, claimReward } from '../evm';
 
-import { text, minAmount, timeLockNumber, depositFee, exchangeRate, reward } from '../../config.json';
+import {
+  text,
+  minAmount,
+  timeLockNumber,
+  depositFee,
+  exchangeRate,
+  reward,
+} from '../../config.json';
 
 function validAmount(amount) {
   // Validate amount of Satoshis
@@ -22,6 +29,12 @@ function validAmount(amount) {
   return !!(bNum.isInteger() && bNum >= 0 && bNum < 2.1 * 1e14);
 }
 
+// convert sat to BTC; trim to 8 decimal places; remove trailing zeros
+function satToBtc(amt) {
+  return parseFloat((amt / 1e8).toFixed(8))
+    .toString();
+}
+
 export default () => {
   const api = Router();
 
@@ -30,7 +43,14 @@ export default () => {
   });
 
   api.get('/info', (req, res) => {
-    res.json({ text, minAmount, timeLockNumber, depositFee, exchangeRate, reward });
+    res.json({
+      text,
+      minAmount,
+      timeLockNumber,
+      depositFee,
+      exchangeRate,
+      reward,
+    });
   });
 
   // TODO skip this step if user has already deposited...
@@ -46,7 +66,9 @@ export default () => {
         return;
       }
 
-      const smallInvoice = await getInvoice();
+      const btcAmt = satToBtc(req.query.amount);
+
+      const smallInvoice = await getInvoice(`Deposit for ${btcAmt} BTC`);
 
       store({
         rskAddress: req.query.address,
@@ -92,7 +114,9 @@ export default () => {
 
     const order = getBySmallHash(smallHash);
 
-    order.fullInvoice = await getInvoice(order.amount);
+    const btcAmt = satToBtc(order.amount);
+
+    order.fullInvoice = await getInvoice(`Full payment of ${btcAmt} BTC`, order.amount);
 
     const txid = await createSwap(order.rskAddress, order.amount, `0x${hashBytes.toString('hex')}`);
 

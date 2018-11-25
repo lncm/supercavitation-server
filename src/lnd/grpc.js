@@ -72,8 +72,11 @@ export const infoGet = () => new Promise((resolve) => {
   });
 });
 
-export const invoiceGet = amount => new Promise((resolve) => {
-  lightning.AddInvoice({ value: amount }, (err, res) => {
+export const invoiceGet = (memo, amount) => new Promise((resolve) => {
+  lightning.AddInvoice({
+    value: amount,
+    memo
+  }, (err, res) => {
     if (err) {
       console.log(err);
       return;
@@ -108,7 +111,6 @@ export const invoicePreImage = hash => new Promise((resolve) => {
     resolve(invoice.r_preimage);
   });
 });
-
 
 
 export default lightning;
