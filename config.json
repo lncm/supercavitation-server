@@ -5,8 +5,10 @@
 	"lndUri": "localhost:10009",
 	"evmUri": "https://public-node.testnet.rsk.co",
 	"derevationPath": "m/44'/37310'/0'/0/",
-	"blocksBeforeCancelEnabled": 100,
+	"timeLockNumber": 100,
 	"reward": 500,
-	"minimumAmount": 1000,
+	"minAmount": 1000,
+	"depositFee": 50,
+	"exchangeRate": 0.98,
 	"text": "Hello, I am BOB"
 }

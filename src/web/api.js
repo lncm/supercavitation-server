@@ -9,11 +9,11 @@ import { signMessage, createSwap, claimReward } from '../evm';
 
 import {
   text,
-  minAmount,
   timeLockNumber,
+  reward,
+  minAmount,
   depositFee,
   exchangeRate,
-  reward,
 } from '../../config.json';
 
 function validAmount(amount) {
@@ -45,11 +45,11 @@ export default () => {
   api.get('/info', (req, res) => {
     res.json({
       text,
-      minAmount,
       timeLockNumber,
+      reward,
+      minAmount,
       depositFee,
       exchangeRate,
-      reward,
     });
   });
 
