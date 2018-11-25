@@ -1,5 +1,5 @@
 import web3, { contract } from './web3';
-import { reward, blocksBeforeCancelEnabled } from '../../config.json';
+import { reward, timeLockNumber } from '../../config.json';
 
 const gasPrice = 1;
 
@@ -30,7 +30,7 @@ export function messageIsValid(address, data, signature) {
 export async function createSwap(customer, amount, preImageHash) {
   const [from] = await getAccounts();
   const txId = await new Promise((resolve) => {
-    contract.methods.createSwap(customer, amount * 1e10, reward, preImageHash, blocksBeforeCancelEnabled).send({ from, gasPrice })
+    contract.methods.createSwap(customer, amount * 1e10, reward, preImageHash, timeLockNumber).send({ from, gasPrice })
       .on('transactionHash', tx => resolve(tx));
   });
   return txId;
