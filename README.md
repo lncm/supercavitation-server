@@ -6,22 +6,37 @@
 // TODO add signatures bi-directional 
 // TODO errors
 
+// GET /info 
+// -> 
+{
+  text,
+  timeLockBlocks,
+  reward,
+  minAmount,
+  depositFee,
+  exchangeRate,
+  version,
+}
+
 // POST /swap/new
+// <-
 {
   customer: '0xAlice',
   contract: '0xContract',
   amount: '123131233',
 }
-// response -> 
+// -> 
 {
+  paymentInvoice: '...', // optional; alice might be whitelisted
   depositInvoice: '...', // the preImageHash + other payment info is inferred client side
-  paymentInvoice: '...',
 }
+
 // GET /swap/status
+// <-
 {
   preImageHash: '...', // always in hex
 }
-// repsonses ->
+// ->
 {
   creationTxId: '',
   completedTxId: '',
@@ -41,6 +56,11 @@
 - Improve the config file
 - Write Docs
 
+## Post-Post Hackathon TODOs
+
+- Handle invoice timeouts
+- Gracefully handle restarts
+- Persistant storage
 
 ## LND Start
 

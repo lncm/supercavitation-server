@@ -1,14 +1,15 @@
 {
 	"port": 8081,
-	"bodyLimit": "100kb",
-	"corsHeaders": ["Link"],
-	"lndUri": "localhost:10009",
+	"lndUri": "lndtest.lncm.io:443",
 	"evmUri": "https://public-node.testnet.rsk.co",
 	"derevationPath": "m/44'/37310'/0'/0/",
-	"timeLockNumber": 100,
-	"reward": 500,
-	"minAmount": 1000,
-	"depositFee": 50,
+	"invoiceExpiry": 3600,
+	"timeLockBlocks": 100,
+	"reward": "500",
+	"minAmount": "1000",
+	"depositFee": "50",
 	"exchangeRate": 0.98,
-	"text": "Hello, I am BOB"
+	"text": "Hello, I am BOB",
+	"gasPrice": 1,
+	"gas": 6721975
 }

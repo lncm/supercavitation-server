@@ -5,6 +5,9 @@
     "es6": true
   },
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "object-curly-newline": "off",
+    "import/prefer-default-export": "off",
+    "max-len": "off"
   }
 }
