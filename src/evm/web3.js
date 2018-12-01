@@ -10,6 +10,7 @@ const provider = new HDWalletProvider(mnemonic, evmUri, 0, 1, false, derevationP
 const web3 = new Web3(provider);
 
 const contractAddress = SwapOffering.networks['31'].address;
+console.log({ contractAddress, evmUri });
 export const contract = new web3.eth.Contract(SwapOffering.abi, contractAddress);
 
 export default web3;

@@ -22,8 +22,8 @@
   "homepage": "https://github.com/lncm/supercavitation-server#readme",
   "dependencies": {
     "@grpc/proto-loader": "^0.3.0",
-    "@lncm/supercavitation-contracts": "0.0.5",
-    "bignumber.js": "latest",
+    "@lncm/supercavitation-contracts": "^0.1.0",
+    "bignumber.js": "^8.0.1",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cors": "2.7.1",

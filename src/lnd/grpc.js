@@ -75,7 +75,7 @@ export const infoGet = () => new Promise((resolve) => {
 export const invoiceGet = (memo, amount) => new Promise((resolve) => {
   lightning.AddInvoice({
     value: amount,
-    memo
+    memo,
   }, (err, res) => {
     if (err) {
       console.log(err);

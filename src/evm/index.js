@@ -2,7 +2,6 @@ import web3, { contract } from './web3';
 import { reward, timeLockNumber } from '../../config.json';
 
 const gasPrice = 1;
-const gas = 6000000;
 
 export async function getAccounts() {
   const accounts = await web3.eth.getAccounts();
@@ -31,9 +30,8 @@ export function messageIsValid(address, data, signature) {
 export async function createSwap(customer, amount, preImageHash) {
   const [from] = await getAccounts();
   const txId = await new Promise((resolve) => {
-    const intAmount = parseInt(amount);
-    console.log({ customer, intAmount, reward, preImageHash, timeLockNumber, from, gasPrice, gas });
-    contract.methods.createSwap(customer, intAmount, reward, preImageHash, timeLockNumber).send({ from, gasPrice, gas })
+    console.log({ customer, amount, reward, preImageHash, timeLockNumber, from, gasPrice });
+    contract.methods.createSwap(customer, amount, reward, preImageHash, timeLockNumber).send({ from, gasPrice })
       .on('transactionHash', tx => resolve(tx));
   });
   return txId;
