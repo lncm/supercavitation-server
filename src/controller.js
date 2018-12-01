@@ -29,9 +29,7 @@ async function handlePayments(preImageHash) {
   const { depositPreImageHash, contract, customer, amount } = await read(preImageHash);
   if (depositPreImageHash) {
     // wait for the deposit to be settled if it's set before sending the tx...
-    console.log('waiting for deposit', depositPreImageHash);
     await waitFor(depositPreImageHash, 'settled');
-    console.log('deposit paid!', depositPreImageHash);
   }
   // publish the swap, it resolves when mined
   await contractTx({
@@ -42,9 +40,7 @@ async function handlePayments(preImageHash) {
     onMined: creationMined => upsert(preImageHash, { creationMined }),
   });
   // now it's mined, we can listen for the invoice to be paid
-  console.log('waiting for full payment', preImageHash);
   await waitFor(preImageHash, 'settled');
-  console.log('swap paid!', preImageHash);
   // cool, paid, now let's claim the reward by settling the contract...
   const { preImage } = await read(preImageHash);
   await contractTx({
@@ -54,12 +50,10 @@ async function handlePayments(preImageHash) {
     onPublished: settleTx => upsert(preImageHash, { settleTx }),
     onMined: settleMined => upsert(preImageHash, { settleMined }),
   });
-  console.log('swap settled!', preImageHash);
 }
 
 // handles new requests
 export async function createSwap({ contract, customer, amount }) {
-  // console.log('creating swap...', { contract, customer, amount });
   // TODO check if alice is blacklisted
   // TODO see if we can create the swap right now (EVM call, throw the error)
   // TODO set a relavant memo
@@ -86,12 +80,10 @@ export async function getSwapStatus({ preImageHash }) {
   // deposit not paid, await payment and return creationTx...
   const { creationTx, settleTx } = await read(preImageHash);
   if (!creationTx) {
-    console.log('returning creationTx');
     return { creationTx: (await waitFor(preImageHash, 'creationTx')).creationTx };
   }
   // main invoice not paid, await payment and return settleTx...
   if (!settleTx) {
-    console.log('returning settleTx');
     return { settleTx: (await waitFor(preImageHash, 'settleTx')).settleTx };
   }
   // settleTx is created already; return immediately, we are done.

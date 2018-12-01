@@ -22,11 +22,10 @@ const macaroonCreds = grpc.credentials.createFromMetadataGenerator((args, callba
 });
 const creds = grpc.credentials.combineChannelCredentials(sslCreds, macaroonCreds);
 const lnrpcDescriptor = grpc.load(path.resolve(__dirname, './rpc.proto'));
-const lightning = lnrpcDescriptor.lnrpc.Lightning(lndUri, creds);
+const lightning = new lnrpcDescriptor.lnrpc.Lightning(lndUri, creds);
 
 // keep the `./store` updated with invoice state...
 (function subscribeToInvoiceUpdates() {
-  console.log('Subscribing to invoice updates...');
   const call = lightning.subscribeInvoices();
   call.on('data', (invoice) => {
     // TODO, save the add_index for better re-subscribing
@@ -40,9 +39,9 @@ const lightning = lnrpcDescriptor.lnrpc.Lightning(lndUri, creds);
       preImage: invoice.r_preimage.toString('hex'),
     });
   });
-  call.on('error', (error) => {
-    console.error(error);
-    setTimeout(subscribeToInvoiceUpdates, 1000);
+  call.on('error', () => {
+    console.log('grpc stream connection error, reconnecting');
+    setTimeout(subscribeToInvoiceUpdates, 100);
   });
 }());
 

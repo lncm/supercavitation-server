@@ -1,6 +1,6 @@
 // TODO replace with a persistent store
 // we're using async now for future integration
-// ...with some hacky 'oplog' listener
+// ...with some hacky 'oplog' listener; use some native store instead
 
 const store = {};
 const listeners = {};
@@ -11,7 +11,7 @@ export async function read(preImageHash) {
 }
 
 export async function upsert(preImageHash, update) {
-  console.log('updating store', { preImageHash, update });
+  console.log({ preImageHash, update });
   store[preImageHash] = { ...store[preImageHash], ...update };
   Object.values((listeners[preImageHash] || {})).forEach(fn => fn(update));
   return read(preImageHash);

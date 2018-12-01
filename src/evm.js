@@ -32,7 +32,6 @@ export function getContract(address) {
 
 export async function contractTx({ contract, method, args, onMined, onPublished }) {
   const from = await getAccount();
-  console.log('creating tx', { method, args, contract, from, gasPrice });
   return new Promise((resolve, reject) => {
     getContract(contract).methods[method](...args).send({ from, gasPrice, gas })
       .on('error', reject)

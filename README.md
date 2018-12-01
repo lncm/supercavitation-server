@@ -1,73 +1,27 @@
 # Supercavitation Server
 
-## API
+## Post-Hackathon Updates
 
-```javascript
-// TODO add signatures bi-directional 
-// TODO errors
-
-// GET /info 
-// -> 
-{
-  text,
-  timeLockBlocks,
-  reward,
-  minAmount,
-  depositFee,
-  exchangeRate,
-  version,
-}
-
-// POST /swap/new
-// <-
-{
-  customer: '0xAlice',
-  contract: '0xContract',
-  amount: '123131233',
-}
-// -> 
-{
-  paymentInvoice: '...', // optional; alice might be whitelisted
-  depositInvoice: '...', // the preImageHash + other payment info is inferred client side
-}
-
-// GET /swap/status
-// <-
-{
-  preImageHash: '...', // always in hex
-}
-// ->
-{
-  creationTxId: '',
-  completedTxId: '',
-}
-```
-
-## Post-Hackathon TODOs 
-
-- Create new Documented API
- - Use POST for everything
- - Always pass around a hex version of the preimage(?)
- - Sign stuff
+- Refactor
+- New API
+ - Simpler, RESTful endpoints
+ - Always pass around a hex version of the preimage
  - Accept contract address
-- Implement new API
-- Tests
-- Fix the subscription System
-- Improve the config file
+- Fixed the invoice subscriptions
+- Add more inside config file
+
+## Still TODO
+
+- See `TODO` in code...
+- Verify Message Signatures
+- Error Handling
+- Test Skipping Deposit / Deposit Whitelist
+- Two Bob Deployments
 - Write Docs
 
-## Post-Post Hackathon TODOs
+## Post-Post Hackathon TODOs (i.e. Icebox)
 
-- Handle invoice timeouts
-- Gracefully handle restarts
+- Deal with LND invoice timeouts
 - Persistant storage
-
-## LND Start
-
-```
-docker stop lndt
-docker rm `docker ps --no-trunc -aq`
-docker create --net host --name lndt lightninglabs/lnd --bitcoin.active --bitcoin.testnet --bitcoin.node=neutrino --neutrino.connect=faucet.lightning.community --noseedbackup
-docker start lndt
-docker logs lndt -f
-```
+- Handle restarts
+- Tests
