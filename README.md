@@ -1,5 +1,33 @@
 # Supercavitation Server
 
+## API
+
+```javascript
+// TODO add signatures bi-directional 
+// TODO errors
+
+// POST /swap/new
+{
+  customer: '0xAlice',
+  contract: '0xContract',
+  amount: '123131233',
+}
+// response -> 
+{
+  depositInvoice: '...', // the preImageHash + other payment info is inferred client side
+  paymentInvoice: '...',
+}
+// GET /swap/status
+{
+  preImageHash: '...', // always in hex
+}
+// repsonses ->
+{
+  creationTxId: '',
+  completedTxId: '',
+}
+```
+
 ## Post-Hackathon TODOs 
 
 - Create new Documented API
