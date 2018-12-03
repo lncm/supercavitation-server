@@ -36,6 +36,7 @@ const lightning = new lnrpcDescriptor.lnrpc.Lightning(lndUri, creds);
       createdAt: invoice.creation_date,
       settledAt: invoice.settle_date,
       expiry: invoice.expiry,
+      value: invoice.value,
       preImage: invoice.r_preimage.toString('hex'),
     });
   });

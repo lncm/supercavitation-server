@@ -22,8 +22,6 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 
-// TODO message validation middelware
-
 app.get('/info', (req, res) => {
   res.json(getSwapConfig());
 });

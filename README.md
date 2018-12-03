@@ -3,10 +3,10 @@
 ## Post-Hackathon Updates
 
 - Refactor
-- New API
- - Simpler, RESTful endpoints
- - Always pass around a hex version of the preimage
- - Accept contract address
+- New API with simpler, RESTful endpoints
+- Always pass around a hex version of the preimage
+- Proper conversion Satoshis -> Wei (using BigNumber)
+- Accept contract address
 - Fixed the invoice subscriptions
 - Add more inside config file
 
@@ -14,13 +14,13 @@
 
 - See `TODO` in code...
 - Verify Message Signatures
-- Error Handling
-- Test Skipping Deposit / Deposit Whitelist
 - Two Bob Deployments
 - Write Docs
 
-## Post-Post Hackathon TODOs (i.e. Icebox)
+## Post-Post Hackathon TODOs
 
+- Error Handling
+- Test Skipping Deposit / Deposit Whitelist
 - Deal with LND invoice timeouts
 - Persistant storage
 - Handle restarts
