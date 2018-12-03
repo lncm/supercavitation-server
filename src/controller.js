@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
 import { version } from '../package.json';
-import { text, timeLockBlocks, rewardWei, minAmountSatoshis, depositFeeSatoshis, exchangeRate, supercavitationWei } from '../config.json';
+import { text, timeLockBlocks, rewardWei, minAmountSatoshis, depositFeeSatoshis, exchangeRate, supercavitationWei } from './config';
 import { createInvoice } from './lnd';
 import { contractTx } from './evm';
 import { upsert, read, waitFor } from './store';

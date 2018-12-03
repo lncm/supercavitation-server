@@ -2,7 +2,7 @@ import grpc from 'grpc';
 import fs from 'fs';
 import path from 'path';
 
-import { invoiceExpiry, lndUri } from '../config.json';
+import { invoiceExpiry, lndUri } from './config';
 
 import { upsert } from './store';
 

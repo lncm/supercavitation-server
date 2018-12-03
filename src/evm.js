@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
 import SwapOffering from '@lncm/supercavitation-contracts/build/contracts/SwapOffering.json';
 
-import { gas, gasPrice, evmUri, derevationPath } from '../config.json';
+import { gas, gasPrice, evmUri, derevationPath } from './config';
 
 const contracts = {};
 const mnemonic = process.env.MNEMONIC.trim();
