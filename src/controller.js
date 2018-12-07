@@ -112,7 +112,11 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
 // gets called multiple times at various different points, returns when state udpates
 export async function getSwapStatus({ preImageHash }) {
   // deposit not paid, await payment and return creationTx...
-  const { creationTx, settleTx } = await read(preImageHash);
+  const swap = await read(preImageHash);
+  if (!swap) {
+    throw new Error('Swap does not exist');
+  }
+  const { creationTx, settleTx } = swap;
   if (!creationTx) {
     return { creationTx: (await waitFor(preImageHash, 'creationTx')).creationTx };
   }

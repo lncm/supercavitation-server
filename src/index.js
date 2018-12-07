@@ -30,8 +30,17 @@ app.post('/swap', async (req, res) => {
   res.json(await createSwap(req.body));
 });
 
-app.get('/swap', async (req, res) => {
-  res.json(await getSwapStatus(req.query));
+app.get('/swap', async (req, res, next) => {
+  try {
+    res.json(await getSwapStatus(req.query));
+  } catch (e) {
+    next(e);
+  }
+});
+
+// handle errors
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).send({ error: err.message });
 });
 
 app.server.listen(process.env.PORT || port, () => {
