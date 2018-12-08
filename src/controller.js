@@ -119,7 +119,7 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
 export async function awaitSwapStatus({ preImageHash, existing }) {
   // read the swap data
   const swap = await read(preImageHash);
-  if (!swap) { throw new Error('Swap does not exist'); }
+  if (!swap) { throw new Error('Swap does not exist - did you pass the correct preImageHash to the correct contract?'); }
   // if the client passess `existing` flag, we return the full swap
   if (existing) {
     return swap;
