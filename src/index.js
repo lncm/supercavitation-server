@@ -22,12 +22,16 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/info', (req, res) => {
-  res.json(getSwapConfig());
+app.get('/info', async (req, res) => {
+  res.json(await getSwapConfig());
 });
 
-app.post('/swap', async (req, res) => {
-  res.json(await createSwap(req.body));
+app.post('/swap', async (req, res, next) => {
+  try {
+    res.json(await createSwap(req.body));
+  } catch (e) {
+    next(e);
+  }
 });
 
 app.get('/swap', async (req, res, next) => {
@@ -39,7 +43,7 @@ app.get('/swap', async (req, res, next) => {
 });
 
 // handle errors
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.statusCode || 500).send({ error: err.message });
 });
 

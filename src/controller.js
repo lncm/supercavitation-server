@@ -2,7 +2,7 @@ import Web3 from 'web3';
 
 import { version } from '../package.json';
 import { createInvoice } from './lnd';
-import { contractTx } from './evm';
+import { contractTx, signMessage } from './evm';
 import { upsert, read, waitFor } from './store';
 import {
   name,
@@ -18,6 +18,11 @@ import {
 const { utils: { toBN } } = Web3;
 
 // PRIVATE
+async function createSignedPayload(json) {
+  const data = JSON.stringify(json);
+  const { signature, message, address } = await signMessage(data);
+  return { data, signature, message, address };
+}
 
 // talks to LND, creates a new invoice
 async function generateInvoice({ value, memo }) {
@@ -107,11 +112,11 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
   // in the backgorund, we'll listen for updates to this swap and handle payment events
   handlePayments(preImageHash);
   // send data to client
-  return swap;
+  return createSignedPayload(swap);
 }
 
 // gets called multiple times at various different points, returns when state udpates
-export async function getSwapStatus({ preImageHash, existing }) {
+export async function awaitSwapStatus({ preImageHash, existing }) {
   // read the swap data
   const swap = await read(preImageHash);
   if (!swap) { throw new Error('Swap does not exist'); }
@@ -131,10 +136,14 @@ export async function getSwapStatus({ preImageHash, existing }) {
   return { settleTx: swap.settleTx };
 }
 
+export async function getSwapStatus(args) {
+  return createSignedPayload(await awaitSwapStatus(args));
+}
+
 // sends some info to client about the swap (non-binding advertisement)
-export function getSwapConfig() {
+export async function getSwapConfig() {
   // TODO this could by dynamic, based on alice's reptuation
-  return {
+  return createSignedPayload({
     text,
     name,
     timeLockBlocks,
@@ -144,5 +153,5 @@ export function getSwapConfig() {
     exchangeRate,
     version,
     supercavitationWei,
-  };
+  });
 }

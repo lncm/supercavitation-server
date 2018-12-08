@@ -15,7 +15,7 @@ export async function getAccount() {
 
 export async function signMessage(message) {
   const address = await getAccount();
-  return web3.eth.sign(message, address);
+  return { signature: await web3.eth.sign(message, address), address };
 }
 
 export function messageIsValid(address, data, signature) {
