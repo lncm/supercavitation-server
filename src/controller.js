@@ -62,18 +62,18 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
   // TODO actual logic to skip the deposit if alice has already deposited
   const skipDeposit = !depositFeeSatoshis; // for now, skip if the config sets deposit fee to 0 (TODO test this)
   // calcualte depositfee
-  const actualDepositFee = skipDeposit ? 0 : depositFeeSatoshis;
+  const depositFee = skipDeposit ? 0 : depositFeeSatoshis;
 
   // calcualte the fees
   const amountOfferedInWei = toBN(requestedAmountInSatoshis).mul(toBN(exchangeRate));
-  const depositFeeInWei = toBN(actualDepositFee).pow(toBN(10));
+  const depositFeeInWei = toBN(depositFee).pow(toBN(10));
   const amountAfterFeesWei = amountOfferedInWei.sub(toBN(rewardWei)).sub(toBN(supercavitationWei)).sub(depositFeeInWei);
 
   // handle the deposit invoice, if required
   const depositData = {};
   if (!skipDeposit) {
     const memo = `Deposit to ${name} for creation of swap for ${requestedAmountInSatoshis} satoshis`;
-    const { preImageHash, paymentRequest } = await generateInvoice({ memo, value: actualDepositFee.toString() });
+    const { preImageHash, paymentRequest } = await generateInvoice({ memo, value: depositFee.toString() });
     depositData.depositPreImageHash = preImageHash;
     depositData.depositInvoice = paymentRequest;
   }
@@ -88,6 +88,7 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
     skipDeposit,
     paymentInvoice,
     preImageHash,
+    depositFee,
     contract,
     customer,
     exchangeRate,
@@ -110,22 +111,24 @@ export async function createSwap({ contract, customer, amount: requestedAmountIn
 }
 
 // gets called multiple times at various different points, returns when state udpates
-export async function getSwapStatus({ preImageHash }) {
-  // deposit not paid, await payment and return creationTx...
+export async function getSwapStatus({ preImageHash, existing }) {
+  // read the swap data
   const swap = await read(preImageHash);
-  if (!swap) {
-    throw new Error('Swap does not exist');
+  if (!swap) { throw new Error('Swap does not exist'); }
+  // if the client passess `existing` flag, we return the full swap
+  if (existing) {
+    return swap;
   }
-  const { creationTx, settleTx } = swap;
-  if (!creationTx) {
+  // deposit not paid, await payment and return creationTx...
+  if (!swap.creationTx) {
     return { creationTx: (await waitFor(preImageHash, 'creationTx')).creationTx };
   }
   // main invoice not paid, await payment and return settleTx...
-  if (!settleTx) {
+  if (!swap.settleTx) {
     return { settleTx: (await waitFor(preImageHash, 'settleTx')).settleTx };
   }
   // settleTx is created already; return immediately, we are done.
-  return { settleTx };
+  return { settleTx: swap.settleTx };
 }
 
 // sends some info to client about the swap (non-binding advertisement)
