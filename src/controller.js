@@ -15,7 +15,7 @@ import {
 } from './config';
 
 // TODO more elegantly?
-const { createInvoice } = (process.env.GANACHE ? require('./lndDevStub') : require('./lnd'));
+const { createInvoice } = (process.env.GANACHE ? require('./lndDevMock') : require('./lnd'));
 
 const { utils: { toBN } } = Web3;
 

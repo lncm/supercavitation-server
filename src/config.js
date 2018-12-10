@@ -5,6 +5,11 @@ const creationGas = '75432';
 const creationSatoshis = (creationGas / 1e10) > 1 ? Math.ceil(creationGas / 1e10) : 1;
 
 /*
+DEV (when GANACHE is passed)
+*/
+export const devMiningTime = 6000; // miliseconds to wait for each stage
+
+/*
 NETWORK
 */
 // web service port

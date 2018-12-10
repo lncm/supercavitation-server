@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 
+import { devMiningTime } from './config';
 import { upsert } from './store';
 
 const fakeInvoice = {
@@ -30,7 +31,7 @@ export async function createInvoice({ memo }) {
   const preImageHash = crypto.createHash('sha256').update(Buffer.from(preImage, 'hex')).digest().toString('hex');
   const thisInvoice = { ...fakeInvoice, preImage, r_preimage: preImage, r_hash: preImageHash };
   // if this invoice is a deposit, wait for x, otherwise, wait longer (to simulate sequential payments)
-  const waitTime = memo.indexOf('Deposit') === 0 ? 1000 : 6000;
+  const waitTime = memo.indexOf('Deposit') === 0 ? devMiningTime : (devMiningTime * 2) + 1000;
   (async () => {
     // each time invoice is issued, we simply wait a bit, then pay it
     upsert(preImageHash, { ...thisInvoice, settled: false });
