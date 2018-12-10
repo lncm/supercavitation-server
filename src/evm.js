@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
 import SwapOffering from '@lncm/supercavitation-contracts/build/contracts/SwapOffering.json';
@@ -5,7 +7,7 @@ import SwapOffering from '@lncm/supercavitation-contracts/build/contracts/SwapOf
 import { gas, gasPrice, evmUri, derevationPath } from './config';
 
 const contracts = {};
-const mnemonic = process.env.MNEMONIC.trim();
+const mnemonic = fs.readFileSync(path.resolve(__dirname, '../creds/mnemonic')).toString();
 const provider = new HDWalletProvider(mnemonic, evmUri, 0, 1, false, derevationPath);
 const web3 = new Web3(provider);
 

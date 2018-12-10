@@ -1,7 +1,7 @@
+dist
 node_modules
 creds/admin.macaroon
 creds/tls.cert
-dist
-
+creds/mnemonic
 /.idea
 .DS_Store
