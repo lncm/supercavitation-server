@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -w config.json -w src --exec \"babel-node src --presets es2015,stage-0\"",
+    "dev:ganache": "GANACHE=1 npm run dev",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "start": "node dist",
     "prestart": "npm run -s build",

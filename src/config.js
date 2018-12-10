@@ -12,12 +12,12 @@ export const port = 8081;
 // lightning node location
 export const lndUri = 'lndtest.lncm.io:443';
 // etheruem node
-export const evmUri = 'https://public-node.testnet.rsk.co';
+export const evmUri = process.env.GANACHE ? 'http://localhost:8545' : 'https://public-node.testnet.rsk.co';
 
 /*
 KEYSTORE
 */
-// path used to derive `process.env.MNEMONIC`
+// path used to derive `mnemonic`
 export const derevationPath = "m/44'/37310'/0'/0/";
 
 

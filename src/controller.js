@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 
 import { version } from '../package.json';
-import { createInvoice } from './lnd';
 import { contractTx, signMessage } from './evm';
 import { upsert, read, waitFor } from './store';
 import {
@@ -14,6 +13,9 @@ import {
   exchangeRate,
   supercavitationWei,
 } from './config';
+
+// TODO more elegantly?
+const { createInvoice } = (process.env.GANACHE ? require('./lndDevStub') : require('./lnd'));
 
 const { utils: { toBN } } = Web3;
 
