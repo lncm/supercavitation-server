@@ -15,7 +15,7 @@ NETWORK
 // web service port
 export const port = 8081;
 // lightning node location
-export const lndUri = 'lndtest.lncm.io:443';
+export const lndUri = process.env.LND_URI || 'localhost:10009';
 // etheruem node
 export const evmUri = process.env.GANACHE ? 'http://localhost:8545' : 'https://public-node.testnet.rsk.co';
 
