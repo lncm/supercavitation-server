@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import crypto from 'crypto';
 
 import { version } from '../package.json';
 import { contractTx, signMessage } from './evm';
@@ -22,9 +23,11 @@ const { utils: { toBN } } = Web3;
 
 // PRIVATE
 async function createSignedPayload(json) {
-  const data = JSON.stringify(json);
-  const { signature, message, address } = await signMessage(data);
-  return { data, signature, message, address };
+  const timestamp = new Date();
+  const data = JSON.stringify({ json, timestamp });
+  const hash = crypto.createHash('sha256').update(data).digest().toString('hex');
+  const { signature, message, address } = await signMessage(hash);
+  return { data, hash, signature, message, address };
 }
 
 // talks to LND, creates a new invoice
