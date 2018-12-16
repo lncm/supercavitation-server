@@ -12,10 +12,11 @@ import {
   depositFeeSatoshis,
   exchangeRate,
   supercavitationWei,
+  lndUri,
 } from './config';
 
 // TODO more elegantly?
-const { createInvoice } = (process.env.GANACHE ? require('./lndDevMock') : require('./lnd'));
+const { createInvoice, getInfo } = (process.env.GANACHE ? require('./lndDevMock') : require('./lnd'));
 
 const { utils: { toBN } } = Web3;
 
@@ -144,6 +145,8 @@ export async function getSwapStatus(args) {
 
 // sends some info to client about the swap (non-binding advertisement)
 export async function getSwapConfig() {
+  const { identity_pubkey: pubKey } = await getInfo();
+  const lightningNode = `${pubKey}@${lndUri.split(':')[0]}`;
   // TODO this could by dynamic, based on alice's reptuation
   return createSignedPayload({
     text,
@@ -155,5 +158,6 @@ export async function getSwapConfig() {
     exchangeRate,
     version,
     supercavitationWei,
+    lightningNode,
   });
 }

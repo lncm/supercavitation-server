@@ -46,6 +46,15 @@ const lightning = new lnrpcDescriptor.lnrpc.Lightning(lndUri, creds);
   });
 }());
 
+export async function getInfo() {
+  return new Promise((resolve, reject) => {
+    lightning.GetInfo({}, (err, res) => {
+      if (err) { reject(err); }
+      resolve(res);
+    });
+  });
+}
+
 export async function createInvoice(props) {
   return new Promise((resolve, reject) => {
     console.log('creating invoice', props);

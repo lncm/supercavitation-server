@@ -42,3 +42,7 @@ export async function createInvoice({ memo }) {
   // respond to the client...
   return thisInvoice;
 }
+
+export async function getInfo() {
+  return { };
+}
