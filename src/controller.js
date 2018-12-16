@@ -70,6 +70,9 @@ async function handlePayments(preImageHash) {
 
 export async function createSwap({ contract, customer, amount: requestedAmountInSatoshis }) {
   // TODO check if alice is blacklisted
+  // TODO check that we own the contract
+  // TODO check that the requested amoubnt is OK
+
   // TODO actual logic to skip the deposit if alice has already deposited
   const skipDeposit = !depositFeeSatoshis; // for now, skip if the config sets deposit fee to 0 (TODO test this)
   // calcualte depositfee
@@ -149,6 +152,7 @@ export async function getSwapStatus(args) {
 // sends some info to client about the swap (non-binding advertisement)
 export async function getSwapConfig() {
   const { identity_pubkey: pubKey } = await getInfo();
+  // TODO resolve the lndUri to a public IP
   const lightningNode = `${pubKey}@${lndUri.split(':')[0]}`;
   // TODO this could by dynamic, based on alice's reptuation
   return createSignedPayload({
