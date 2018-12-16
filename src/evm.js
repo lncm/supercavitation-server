@@ -7,7 +7,7 @@ import SwapOffering from '@lncm/supercavitation-contracts/build/contracts/SwapOf
 import { gas, gasPrice, evmUri, derevationPath } from './config';
 
 const contracts = {};
-const mnemonic = fs.readFileSync(path.resolve(__dirname, '../creds/mnemonic')).toString();
+const mnemonic = fs.readFileSync(path.resolve(__dirname, '../creds/mnemonic')).toString().trim();
 const provider = new HDWalletProvider(mnemonic, evmUri, 0, 1, false, derevationPath);
 provider.engine.stop(); // don't need to poll
 const web3 = new Web3(provider);
