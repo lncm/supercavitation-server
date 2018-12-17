@@ -13,7 +13,6 @@ import {
   depositFeeSatoshis,
   exchangeRate,
   supercavitationWei,
-  lndUri,
 } from './config';
 
 // TODO more elegantly?
