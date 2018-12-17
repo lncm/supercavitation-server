@@ -151,9 +151,7 @@ export async function getSwapStatus(args) {
 
 // sends some info to client about the swap (non-binding advertisement)
 export async function getSwapConfig() {
-  const { identity_pubkey: pubKey } = await getInfo();
-  // TODO resolve the lndUri to a public IP
-  const lightningNode = `${pubKey}@${lndUri.split(':')[0]}`;
+  const { identity_pubkey: lightningNode } = await getInfo();
   // TODO this could by dynamic, based on alice's reptuation
   return createSignedPayload({
     text,
