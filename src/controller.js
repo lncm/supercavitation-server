@@ -23,6 +23,7 @@ const { utils: { toBN } } = Web3;
 
 // PRIVATE
 async function createSignedPayload(json) {
+  // TODO - instead of a timestamp, a better way would be have message GUIDs, passed by alice
   const timestamp = new Date();
   const data = JSON.stringify({ json, timestamp });
   const hash = crypto.createHash('sha256').update(data).digest().toString('hex');
