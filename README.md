@@ -1,5 +1,7 @@
 # Supercavitation Server
 
+** TECHNICAL DEMO ONLY DO NOT USE FOR SIGNIFICANT VALUE **
+
 This is the server component of the [Supercavitations Swaps](https://github.com/lncm/supercavitation-swaps) service.
 
 It's a node app that:
