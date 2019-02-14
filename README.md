@@ -53,7 +53,6 @@ Copy `admin.macaroon` and `tls.cert` from your testnet lnd node into the `creds/
 Create `creds/mnemonic` and populate it with a seed generated somewhere. 
   
 ```bash
-
 docker run -it --rm \
     -v $(pwd)/creds/:/src/creds/ \
     -p 8081:8081 \
