@@ -38,6 +38,32 @@ It's a node app that:
 * `npm run dev` development with reloading
 * `GANACHE=1 npm run dev` for offline development (ganache + mock LND)
 
+
+## Docker
+
+```bash
+git clone -b docker git@github.com:lncm/supercavitation-server.git
+cd supercavitation-server
+
+docker build -t supercavitation-server .
+```
+
+Copy `admin.macaroon` and `tls.cert` from your testnet lnd node into the `creds/` directory.
+
+Create `creds/mnemonic` and populate it with a seed generated somewhere. 
+  
+```bash
+
+docker run -it --rm \
+    -v $(pwd)/creds/:/src/creds/ \
+    -p 8081:8081 \
+    --name supercavitation-server \
+    -e LND_URI=LINK_TO_YOUR_LND_NODE \
+    supercavitation-server
+```
+
+
+
 ## TODOs
 
 ### Now
